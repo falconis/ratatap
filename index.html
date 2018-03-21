@@ -27,26 +27,63 @@
             var newColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
             colors.push(newColor);
         }
-        var circles = [];
+        var objects = [];
         function onKeyDown(event) {
             var maxPoint = new Point(view.size.width, view.size.height);
             var randomPoint = Point.random();
             var point = randomPoint * maxPoint;
 
-            var circle = new Path.Circle(point, 500);
-            circle.fillColor = colors[event.key.charCodeAt(0) - 97];
-            circles.push(circle);
+            if(event.key.charCodeAt(0) % 3 === 0) {
+                var newPath = new Path.Circle(point, 500);
+                var newObject = {
+                    path: newPath,
+                    shape: 'circle'
+                };
+            }
+            else if(event.key.charCodeAt(0) % 3 === 1){
+                var newPath = new Path.RegularPolygon(point, 3, 800);
+                var newObject = {
+                    path: newPath,
+                    shape: 'triangle'
+                };
+            }
+            else {
+                var newPath = new Path.RegularPolygon(point, 4, 2);
+                var newObject = {
+                    path: newPath,
+                    shape: 'square'
+                };
+            }
+            newObject.path.fillColor = colors[event.key.charCodeAt(0) - 97];
+            objects.push(newObject);
             sounds[event.key.charCodeAt(0) - 97].play();
         }
         
+        var multiplier = 1;
         function onFrame(event) {
-            for(var i=0; i<circles.length; i++)
+            for(var i=0; i<objects.length; i++)
             {
-                circles[i].fillColor.hue += 1;
-                circles[i].scale(.9);
-                if(circles[i].area < 1) {
-                    circles[i].remove();
-                    circles.splice(i, 1);
+                
+                objects[i].path.fillColor.hue += 1;
+                if(objects[i].shape === 'circle') {
+                    objects[i].path.scale(.9);
+                }
+                if(objects[i].shape === 'triangle') {
+                    objects[i].path.scale(.9);
+                    objects[i].path.rotate(10);
+                }
+                if(objects[i].shape === 'square') {
+                    if(objects[i].path.fillColor.alpha === 1)
+                        multiplier = 1;
+                    if(objects[i].path.fillColor.alpha === 0)
+                        multiplier = -1;
+                    objects[i].path.fillColor.alpha -= .1 * multiplier;
+                    objects[i].path.scale(1.1);
+                    objects[i].path.rotate(multiplier * 10);
+                }
+                if(objects[i].path.area < 1 || objects[i].path.area > (view.size.width * view.size.height)) {
+                    objects[i].path.remove();
+                    objects.splice(i, 1);
                     i--;
                 }
             }
