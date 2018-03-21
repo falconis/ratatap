@@ -7,7 +7,26 @@
     <title>Ratatap</title>
     <link rel="stylesheet" href="assets/css/ratatap.css">
     <script src="assets/js/lib/paper-full.js"></script>
-    <script type="text/paperscript" canvas="myCanvas"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+        var circles = [];
+        function onKeyDown(event) {
+            var maxPoint = new Point(view.size.width, view.size.height);
+            var randomPoint = Point.random();
+            var point = randomPoint * maxPoint;
+
+            var circle = new Path.Circle(point, 500);
+            circle.fillColor = "orange";
+            circles.push(circle);
+        }
+        
+        function onFrame(event) {
+            for(var i=0; i<circles.length; i++)
+            {
+                circles[i].fillColor.hue += 1;
+                circles[i].scale(.9);
+            }
+        }
+    </script>
 </head>
 <body>
     <canvas id="myCanvas" resize></canvas>
