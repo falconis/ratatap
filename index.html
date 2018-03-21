@@ -20,13 +20,18 @@
         /* Generating random colors */
         var colors = []
         for(var i=0; i<26; i++) {
-            var red = Math.floor(Math.random()*256);
-            var green = Math.floor(Math.random()*256);
-            var blue = Math.floor(Math.random()*256);
+            var red = Math.floor(Math.random()*156 + 100);
+            var green = Math.floor(Math.random()*156);
+            var blue = Math.floor(Math.random()*156);
 
             var newColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
             colors.push(newColor);
         }
+        var red = Math.floor(Math.random()*16);
+        var green = Math.floor(Math.random()*16);
+        var blue = Math.floor(Math.random()*106);
+        document.body.style.backgroundColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+
         var objects = [];
         function onKeyDown(event) {
             var maxPoint = new Point(view.size.width, view.size.height);
