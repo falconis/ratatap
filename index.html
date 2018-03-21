@@ -7,7 +7,12 @@
     <title>Ratatap</title>
     <link rel="stylesheet" href="assets/css/ratatap.css">
     <script src="assets/js/lib/paper-full.js"></script>
+    <script src="assets/js/lib/howler.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
+        var sound = new Howl({
+            src: ['assets/sounds/clay.mp3']
+          });
+        
         var circles = [];
         function onKeyDown(event) {
             var maxPoint = new Point(view.size.width, view.size.height);
@@ -17,6 +22,8 @@
             var circle = new Path.Circle(point, 500);
             circle.fillColor = "orange";
             circles.push(circle);
+
+            sound.play();
         }
         
         function onFrame(event) {
