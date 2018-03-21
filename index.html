@@ -9,10 +9,24 @@
     <script src="assets/js/lib/paper-full.js"></script>
     <script src="assets/js/lib/howler.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
-        var sound = new Howl({
-            src: ['assets/sounds/clay.mp3']
-          });
-        
+        /* Generating random sounds */
+        var sounds = []
+        for(var i=0; i<26; i++) {
+            sounds[i] = new Howl({
+                src: ['assets/sounds/'+ Math.floor(Math.random()*26 + 1) +'.mp3']
+            });
+        }
+
+        /* Generating random colors */
+        var colors = []
+        for(var i=0; i<26; i++) {
+            var red = Math.floor(Math.random()*256);
+            var green = Math.floor(Math.random()*256);
+            var blue = Math.floor(Math.random()*256);
+
+            var newColor = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+            colors.push(newColor);
+        }
         var circles = [];
         function onKeyDown(event) {
             var maxPoint = new Point(view.size.width, view.size.height);
@@ -20,10 +34,9 @@
             var point = randomPoint * maxPoint;
 
             var circle = new Path.Circle(point, 500);
-            circle.fillColor = "orange";
+            circle.fillColor = colors[event.key.charCodeAt(0) - 97];
             circles.push(circle);
-
-            sound.play();
+            sounds[event.key.charCodeAt(0) - 97].play();
         }
         
         function onFrame(event) {
@@ -31,6 +44,11 @@
             {
                 circles[i].fillColor.hue += 1;
                 circles[i].scale(.9);
+                if(circles[i].area < 1) {
+                    circles[i].remove();
+                    circles.splice(i, 1);
+                    i--;
+                }
             }
         }
     </script>
